@@ -1,0 +1,28 @@
+name: Banned user check
+description: >
+  Check if the user is present in github banned user list.
+  Add a label and auto-close the PR.
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  check-user-and-apply-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run script to check user and close PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node index.js
